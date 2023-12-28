@@ -13,8 +13,7 @@ GameObject:
   - component: {fileID: 3053493186780683974}
   - component: {fileID: 3231663014084567233}
   - component: {fileID: 8499227039727026778}
-  - component: {fileID: 7433177149041771864}
-  - component: {fileID: 942684642147754169}
+  - component: {fileID: 5918031827081088847}
   m_Layer: 0
   m_Name: Shia
   m_TagString: Untagged
@@ -167,7 +166,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 2.0415618}
   m_Size: {x: 1.03, y: 4.0756}
   m_Direction: 0
---- !u!114 &7433177149041771864
+--- !u!114 &5918031827081088847
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,23 +175,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5490529758665668795}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 741f30960d63a984c904285d23069b75, type: 3}
+  m_Script: {fileID: 11500000, guid: 9acf2bfa0c6c9f443b520b39e6eb1065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movePower: 10
   jumpPower: 15
---- !u!114 &942684642147754169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5490529758665668795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e25edea5f4d77c74d828874c56cf37e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6207583064797869541
 GameObject:
   m_ObjectHideFlags: 0
