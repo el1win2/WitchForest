@@ -1,33 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterController : MonoBehaviour
 {
     public float movePower = 10f;
-    public float jumpPower = 15f;
+    public float jumpPower = 20f;
+    public GameObject end1;
+    public GameObject end2;
+    public GameObject end3;
+    public GameObject heart;
+    public Text Heart;
 
     private Rigidbody2D rb;
     private Animator anim;
-    Vector3 movement;
     private int direction = 1;
     bool isJumping = false;
     private bool alive = true;
-    
+
     void Start()
     {
+        Time.timeScale = 1.0f;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         Restart();
         if (alive)
         {
-            Hurt();
-            Die();
             // Attack();
             Jump();
             Run();
@@ -36,7 +40,49 @@ public class CharacterController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.gameObject.tag == "Mob")
+        {
+            int heart = int.Parse(Heart.text);
+
+            Hurt();
+            if(heart >= 1)
+            {
+                heart--;
+            }
+
+            if (heart <= 0)
+            {
+                heart = 0;
+                Die();
+                Invoke("Dead", 1.5f);
+            }
+            Heart.text = heart.ToString();
+        }
+        else if (other.gameObject.tag == "Flower")
+        {
+            TimeZero();
+            end1.SetActive(true);
+        }
+        else if (other.gameObject.tag == "FlowerTrue")
+        {
+            TimeZero();
+            end3.SetActive(true);
+        }
+
         anim.SetBool("isJump", false);
+    }
+
+    void TimeZero()
+    {
+        Time.timeScale = 0.0f;
+        heart.SetActive(false);
+    }
+    
+    void Dead()
+    {
+        end2.SetActive(true);
+        Time.timeScale = 0.0f;
+        heart.SetActive(false);
     }
 
     void Run()
@@ -97,33 +143,32 @@ public class CharacterController : MonoBehaviour
         }
     }
     */
-    void Hurt()
+    public void Hurt()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
             anim.SetTrigger("hurt");
             if (direction == 1)
-                rb.AddForce(new Vector2(-5f, 1f), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(-10f, 1f), ForceMode2D.Impulse);
             else
-                rb.AddForce(new Vector2(5f, 1f), ForceMode2D.Impulse);
-        }
+                rb.AddForce(new Vector2(10f, 1f), ForceMode2D.Impulse);
+
     }
 
-    void Die()
+    public void Die()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            anim.SetTrigger("die");
-            alive = false;
-        }
+        anim.SetTrigger("die");
+        alive = false;
     }
 
-    void Restart()
+    public void Restart()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             anim.SetTrigger("idle");
             alive = true;
+            transform.position = new Vector3(0, -5, 0);
+            Time.timeScale = 1.0f;
+            heart.SetActive(true);
+            Heart.text = "10";
         }
     }
 }
