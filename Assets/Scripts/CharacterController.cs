@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -12,13 +13,18 @@ public class CharacterController : MonoBehaviour
     public GameObject end2;
     public GameObject end3;
     public GameObject heart;
+    public GameObject Score;
     public Text Heart;
+    public Text timeTxt;
+    public Text Point;
+    public Text bestPoint;
 
     private Rigidbody2D rb;
     private Animator anim;
     private int direction = 1;
     bool isJumping = false;
     private bool alive = true;
+    float nextTime = 0;
 
     void Start()
     {
@@ -29,6 +35,9 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
+        nextTime += Time.deltaTime;
+        timeTxt.text = nextTime.ToString("N2");
+
         // Restart();
         if (alive)
         {
@@ -52,9 +61,23 @@ public class CharacterController : MonoBehaviour
                 heart = 0;
                 Die();
                 Invoke("Dead", 1.5f);
+
+                if (PlayerPrefs.HasKey("bestPoint") == false)
+                {
+                    PlayerPrefs.SetInt("bestPoint", int.Parse(Point.text));
+                }
+                else
+                {
+                    if (PlayerPrefs.GetInt("bestPoint") < int.Parse(Point.text))
+                    {
+                        PlayerPrefs.SetInt("bestPoint", int.Parse(Point.text));
+                    }
+                }
+                bestPoint.text = PlayerPrefs.GetInt("bestPoint").ToString();
             }
             Heart.text = heart.ToString();
         }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -74,6 +97,19 @@ public class CharacterController : MonoBehaviour
                 heart = 0;
                 Die();
                 Invoke("Dead", 1.5f);
+
+                if (PlayerPrefs.HasKey("bestPoint") == false)
+                {
+                    PlayerPrefs.SetInt("bestPoint", int.Parse(Point.text));
+                }
+                else
+                {
+                    if (PlayerPrefs.GetInt("bestPoint") < int.Parse(Point.text))
+                    {
+                        PlayerPrefs.SetInt("bestPoint", int.Parse(Point.text));
+                    }
+                }
+                bestPoint.text = PlayerPrefs.GetInt("bestPoint").ToString();
             }
             Heart.text = heart.ToString();
         }
@@ -81,11 +117,44 @@ public class CharacterController : MonoBehaviour
         {
             TimeZero();
             end1.SetActive(true);
+            float num = 50000 - nextTime * 500;
+            if (num <= 0) num = 0;
+            int point = 50000 + (int)num;
+            Point.text = point.ToString();
+
+            if (PlayerPrefs.HasKey("bestPoint") == false)
+            {
+                PlayerPrefs.SetInt("bestPoint", int.Parse(Point.text));
+            }
+            else
+            {
+                if (PlayerPrefs.GetInt("bestPoint") < int.Parse(Point.text))
+                {
+                    PlayerPrefs.SetInt("bestPoint", int.Parse(Point.text));
+                }
+            }
+            bestPoint.text = PlayerPrefs.GetInt("bestPoint").ToString();
+
         }
         else if (other.gameObject.tag == "FlowerTrue")
         {
             TimeZero();
             end3.SetActive(true);
+            int point = 100000;
+            Point.text = point.ToString();
+
+            if (PlayerPrefs.HasKey("bestPoint") == false)
+            {
+                PlayerPrefs.SetInt("bestPoint", int.Parse(Point.text));
+            }
+            else
+            {
+                if (PlayerPrefs.GetInt("bestPoint") < int.Parse(Point.text))
+                {
+                    PlayerPrefs.SetInt("bestPoint", int.Parse(Point.text));
+                }
+            }
+            bestPoint.text = PlayerPrefs.GetInt("bestPoint").ToString();
         }
 
         anim.SetBool("isJump", false);
@@ -95,6 +164,7 @@ public class CharacterController : MonoBehaviour
     {
         Time.timeScale = 0.0f;
         heart.SetActive(false);
+        Score.SetActive(true);
     }
     
     void Dead()
@@ -102,7 +172,9 @@ public class CharacterController : MonoBehaviour
         end2.SetActive(true);
         Time.timeScale = 0.0f;
         heart.SetActive(false);
+        Score.SetActive(true);
     }
+
 
     void Run()
     {
