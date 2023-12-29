@@ -29,12 +29,31 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
-        Restart();
+        // Restart();
         if (alive)
         {
             // Attack();
             Jump();
             Run();
+        }
+
+        if (transform.position.y < -50)
+        {
+            int heart = int.Parse(Heart.text);
+            transform.position = new Vector3(0, -5, 0);
+
+            if (heart >= 1)
+            {
+                heart--;
+            }
+
+            if (heart <= 0)
+            {
+                heart = 0;
+                Die();
+                Invoke("Dead", 1.5f);
+            }
+            Heart.text = heart.ToString();
         }
     }
 
@@ -158,7 +177,7 @@ public class CharacterController : MonoBehaviour
         anim.SetTrigger("die");
         alive = false;
     }
-
+    /*
     public void Restart()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
@@ -170,5 +189,5 @@ public class CharacterController : MonoBehaviour
             heart.SetActive(true);
             Heart.text = "10";
         }
-    }
+    }*/
 }
